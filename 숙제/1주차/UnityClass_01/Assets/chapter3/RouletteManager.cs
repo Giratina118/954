@@ -76,7 +76,7 @@ public class RouletteManager : MonoBehaviour
 
         if (rouletteState == 3)
         {
-            leftChance.GetComponent<TMP_Text>().text = "Left Chande :  " + rouletteNumber;
+            leftChance.GetComponent<TMP_Text>().text = "Left Chance :  " + rouletteNumber;
         }
 
         // 0 ~ 30, 330 ~ 360
