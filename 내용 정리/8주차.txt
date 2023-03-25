@@ -1,0 +1,140 @@
+화면에 나오는 우선순위(어떤게 더 위에 나오는지)
+Inspector에서 Additional Setting -> Order in Layer
+여기 입력된 숫자가 높을수록 더 앞에 나온다.
+
+
+Arrow 하나 작성
+
+게임 오브젝트 파괴
+if (transform.position.y < -5.0f)
+	Destroy(gameObject);
+if 문으로 랜덤으로 출현하는 화살이 나갔을 시 파괴되도록
+
+Collider 각 개체가 가지는 범위
+이 범위가 닿으면 충돌처리
+
+Vector2 p1 = transform.position;	   // 화살표의 위치값(중심)
+Vector2 p2 = player.transform.position;  // 플레이어의 위치값(중심)
+Vector2 dir = p1 - p2;	// 실제 거리 차이 벡터
+
+float d = dir.magnitude;	// 실제 거리 벡터를 실수로(피타고라스로 길이 구함)
+float r1 = 0.5f;	// 화살표의 반지름(중심으로부터의 범위)
+float r2 = 1.0f;	// 화살표의 반지름(중심으로부터의 범위)
+
+if (d < r1 + r2)	  실제 거리가 각각의 범위 합보다 작으면 충돌
+else if (d > r1 + r2)  실제 거리가 각각의 범위 합보다 크면 충돌 안 한 상태
+
+
+
+
+Hierachy의 개체를 Assets에 끌어다 넣으면 .prefab 형식의 파일이 생김
+그러면 그 이후 위에 쓴 Arrow 하나 짜리 객체를 Hierachy에서 지워도
+Arrow 하나에 적혔던 것들이 prefab에서 작동됨
+
+
+1프레임과 2프레임 사이의 시간을 delta Time이라 부름
+초당 60프레임이라면 60delta Time이 1초
+
+
+Instantiate() -> 오브젝트를 복사할 때 사용
+GameObject go = Instantiate(ArrowPrefab);
+
+nt px = Random.Range(-6, 7);
+go.transform.position = new Vector3(px, 7, 0);
+화살이 내려올 위치를 랜덤으로 지정, 계속 새로운 화살 만들어서 내려옴
+
+
+Hierachy에서 우측 키, UI, Image -> Source Image에 사용할 이미지 넣으면 그대로 표시
+Image Type에서 Filled로 설정하면 그 그림(체력게이지)이 깎이거나 채워지도록 할 수 있다.
+
+Hierachy에서 우측 키, UI, Button - TextMeshPro 버튼 생성
+Source Image에 사용할 이미지 넣으면 버튼 이미지를 바꿀 수 있다.
+버튼 밑에 TextMeshPro가 생성되는데 사용해도 되고 지워도 된다.
+
+버튼의 Inspector 창에서 Button의 On Click() 에서 +로 추가, 그 안에
+Hierachy에서 player(화살표의 효과(이동)로 사용할 함수가 있는)를 넣으면
+그 중에서 그 함수를 지정할 수 있다.(Runtime Only 오른쪽의 창에서)
+
+
+유니티에 GameManager이라는 이름의 C#스크립트를 만들 경우
+톱니바퀴 모양으로 나오나 일반 스크립드와 다르지 않음, 그냥 표시해준거
+
+using UnityEngine.UI;
+GameObject hpGauage;
+public void DecreaseHP()
+{
+        hpGauage.GetComponent<Image>().fillAmount -= 0.1f;
+}	-> 이 함수가 호출될 때마다 HP게이지가 줄어들도록
+
+
+SpriteRenderer spriteRenderer;
+spriteRenderer = GetComponent<SpriteRenderer>(); -> 대상 지정
+	Inspector에서 대상 가져올 때 항상 이런 식으로
+spriteRenderer.enabled = true; true false로 깜빡깜빡 거림
+
+
+
+
+Inspector의 Add Compinent
+Rigidbody 2D	-> 물리법칙 적용
+Circle Collider 2D  -> 그 객체의 범위 원형으로
+Box Collider 2D  -> 그 객체의 범위 사각형으로
+Rigidbody 2D -> Body Type -> Kinematic -> 움직이지 않게 고정(구름)
+Collider에서 Is Trigger 체크 -> 그 물체와 접촉해도 통과
+
+private void OnTriggerEnter2D(Collider2D collision)
+        Debug.Log("Goal");
+접촉해서 겹쳐지면 Goal 문자 뜸
+
+
+Rigidbody2D의 물리엔진에 내장되어 있는 점프 기능 사용
+Rigidbody2D rigidbody2D;
+float jumpForce = 680f;
+float walkForce = 30;
+float maxWalkSpeed = 2.0f;
+
+if (Input.GetKeyDown(KeyCode.Space))
+	rigidbody2D.AddForce(transform.up * jumpForce);
+
+int key = 0;	// 오른쪽 왼쪽 방향 지정
+if (Input.GetKey(KeyCode.RightArrow)) key = 1;
+if (Input.GetKey(KeyCode.LeftArrow)) key = -1;
+
+float speedx = Mathf.Abs(rigidbody2D.velocity.x);
+if (speedx < maxWalkSpeed)
+	rigidbody2D.AddForce(transform.right * key * walkForce);
+		// 최대 속도를 넘지 않을때만 방향에 맞게 이동
+
+if (key != 0)
+	transform.localScale = new Vector3(key, 1, 1);
+고양이 그림 방향(왼쪽 누르면 -1로 반대로 회전)
+
+
+왼쪽 위 버튼들 중 Window -> Animation -> Animation (움직일 고양이 누르고)
+사진 안에 하나씩 넣고 드래그 해서 시간 지정
+
+Animator animator;
+animator = GetComponent<Animator>();
+animator.speed = speedx / 2.0f;
+애니메이션 스피드가 이동 스피드에 따라 변화
+
+
+카메라 캐릭터와 함께 이동
+새로 C#스크립트 만들어 메인 카메라에 넣기
+GameObject player;
+player = GameObject.Find("cat");
+
+Vector3 playerPos = player.transform.position;
+transform.position = new Vector3(transform.position.x, playerPos.y, transform.position.z);
+플레이어 위치에 따라 이동
+
+
+File -> Build Setting
+여기에 사용할 씬 전부 넣어야 함(화면 넘기기 할 때)
+
+using UnityEngine.SceneManagement;		// 이거 써야 함
+if (Input.GetMouseButtonDown(0))
+	SceneManager.LoadScene("Jumping");
+마우스 클릭하면 Jumping이라는 이름의 씬을 불러온다.
+
+

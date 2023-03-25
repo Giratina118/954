@@ -1,0 +1,81 @@
+클래스 필드로 설정 -> public GameObject cube;
+cube.transform.Rotate(0, 0.1f, 0); -> 업데이트에서 실행
+-> 매 프레임마다 y축으로 0.1만큼 계속 회전
+
+transform -> 도형들 정보
+
+저장 후 오른쪽 창에 cube가 나타나는데 그쪽에 Hierachy 창의 오브젝트를
+끌어다 놓으면 그 동작을 함.
+
+
+Asserts에 우측 키, Creat -> Scene 
+
+if (Input.GetMouseButtonDown(0))
+	Debug.Log("마우스 클릭 입력됨");
+Input -> 입력 인식
+GetMouseButtonDown(0) -> 마우스가 클릭 되는 순간 1번
+GetMouseButtonUp(0) -> 마우스가 눌렸다 떨어지는 순간 1번
+GetMouseButton(0) -> 마우스 누르고 있는 순간 계속
+
+transform.rotation.eulerAngles.z
+z축 회전 각도 표시
+
+transform.Rotate(0, 0, rotSpeed);
+이 만큼 각도 회전
+
+
+Vector2 -> 2D에서의 좌표
+
+클래스 필드로 설정
+Vector2 startPos;
+Vector2 endPos;
+
+if (Input.GetMouseButtonDown(0))	마우스 눌렀을 때
+	startPos = Input.mousePosition; 위치좌표 저장
+else if (Input.GetMouseButtonUp(0)) {  마우스 놨을 때
+            endPos = Input.mousePosition;  위치좌표 저장
+            float swipeLength = endPos.x - startPos.x;
+            speed = swipeLength / 2000.0f;
+}
+x좌표 차이 구하고 speed에 저장 ->
+수가 이동시키고 싶은 이동 거리에 비해 크기 때문에 나눠줌
+
+transform.Translate(speed, 0, 0);
+이 좌표만큼 위치 이동
+
+
+UI -> Text - TextMeshPro, TMP -> 텍스트 창
+
+
+GameObject distanceText;  -> 클래스 필드 값
+distanceText = GameObject.Find("Distance"); start 안
+
+유니티에서 Distance를 찾아 distanceText라고 놓는다.
+
+
+CarController 클래스의 값을 다른 클래스에서 불러올 때
+public CarController carController;
+그 이후부터 carController.~의 형태로 필드, 매소드를 쓸 수 있다.
+public으로 된 것만 가져올 수 있음
+클래스를 불러온 후 유니티 화면에서도 드래그로 넣어줘야 한다.
+
+
+distanceText.GetComponent<TMP_Text>().text = "Distance : " + length.ToString("F2") + "m";
+distanceText 즉 유니티의 <TMP_Text>형식인 Distance에
+text형식을 저장한다.
+"Distance : " + length.ToString("F2") + "m"
+length.ToString("F2") -> length를 소숫점 2자리까지 표시
+
+
+Add Component -> Audio Source 소리 추가
+AudioClip에 오디오 파일 넣기
+play on awake 체크 해제
+play on awake -> 시작하자마자 실행
+
+그 사물에 연결된 코드로 가서 소리 내는 조건에 맞춰
+GetComponent<AudioSource>().Play(); 넣는다.
+
+
+
+
+
