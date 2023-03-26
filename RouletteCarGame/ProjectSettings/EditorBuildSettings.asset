@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/chapter6/Jumping.unity
+    guid: 57c138c01ce0390488a9169bc41fc710
+  - enabled: 1
+    path: Assets/chapter6/ClearScene.unity
+    guid: 6f74bdda6cf9a7d419a04189e15512c9
   m_configObjects: {}
